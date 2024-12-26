@@ -1,0 +1,79 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>mx.upiita.traveo.ear</groupId>
+  <artifactId>traveo-ear</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>ear</packaging>
+
+  <properties>
+    <maven.compiler.source>20</maven.compiler.source>
+    <maven.compiler.target>20</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+  </properties>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>jakarta.platform</groupId>
+      <artifactId>jakarta.jakartaee-api</artifactId>
+      <version>10.0.0</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>mx.upiita.traveo.ejb</groupId>
+      <artifactId>traveo-ejb</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <type>ejb</type>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>mx.upiita.traveo.war</groupId>
+      <artifactId>traveo-war</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <type>war</type>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <finalName>${project.artifactId}</finalName>
+    <plugins>
+      <plugin>
+        <groupId>org.wildfly.plugins</groupId>
+        <artifactId>wildfly-maven-plugin</artifactId>
+        <version>3.0.2.Final</version>
+      </plugin>
+      <plugin>
+        <artifactId>maven-ear-plugin</artifactId>
+        <version>3.3.0</version>
+        <configuration>
+          <modules>
+            <webModule>
+              <groupId>mx.upiita.traveo.war</groupId>
+              <artifactId>traveo-war</artifactId> <!--  -->
+              <contextRoot>/traveo-war</contextRoot>
+              <bundleFileName>traveo-war.war</bundleFileName>
+            </webModule>
+            <ejbModule>
+              <groupId>mx.upiita.traveo.ejb</groupId>
+              <artifactId>traveo-ejb</artifactId>
+              <bundleFileName>traveo-ejb.jar</bundleFileName>
+            </ejbModule>
+          </modules>
+        </configuration>
+      </plugin>
+
+
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.13.0</version>
+      </plugin>
+
+    </plugins>
+  </build>
+
+
+</project>
