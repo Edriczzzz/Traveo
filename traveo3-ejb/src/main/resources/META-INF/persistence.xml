@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence>
+    <persistence-unit name="Traveo2PU" transaction-type="JTA">
+        <jta-data-source>java:/Traveo2DS</jta-data-source>
+        <class>mx.upiita.traveo3.ejb.model.Aerolinea</class>
+        <class>mx.upiita.traveo3.ejb.model.Vuelo</class>
+        <class>mx.upiita.traveo3.ejb.model.Usuario</class>
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <properties>
+            <!-- Hibernate properties -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.hbm2ddl.auto" value="validate"/>
+
+        </properties>
+    </persistence-unit>
+</persistence>

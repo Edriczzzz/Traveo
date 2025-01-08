@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <meta charset="UTF-8"/>
+    <title>Traveo</title>
+    <h:outputStylesheet name="css/index.css"/>
+</h:head>
+<h:body>
+    <header>
+        <div class="logo">
+            <h:graphicImage value="./images/logo.png" alt="Traveo Logo" styleClass="logo-img"/>
+        </div>
+        <div class="header-buttons">
+            <h:form>
+                <h:button value="Registrarse" styleClass="btn" outcome="/paginas/register.xhtml" />
+                <h:button value="Iniciar sesión" styleClass="btn" outcome="/paginas/login.xhtml" />
+            </h:form>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Intro Section -->
+        <section class="intro">
+            <h2>Viajes inolvidables</h2>
+            <p>Somos una agencia apasionada por crear viajes inolvidables. Desde el destino hasta la selección de actividades, nos encargamos de todos los detalles para que disfrutes al máximo cada momento de tu jornada.</p>
+        </section>
+
+        <!-- Destinos Populares Section -->
+        <section class="popular-destinations">
+            <h2>Destinos Populares</h2>
+            <div class="destination">
+                <h:graphicImage value="/resources/img/imagenpais1.png" alt="Tokyo" />
+                <div class="destination-info">
+                    <h3>Tokyo</h3>
+                    <p>Descubre la vibrante capital de Japón, una mezcla de tradición y modernidad.</p>
+                    <h:commandButton value="Ver detalles" styleClass="btn" />
+                </div>
+            </div>
+            <div class="destination">
+                <h:graphicImage value="./resources/img/imagenpais2.png" alt="Osaka" />
+                <div class="destination-info">
+                    <h3>Osaka</h3>
+                    <p>Explora la ciudad de los castillos y la deliciosa comida callejera.</p>
+                    <h:commandButton value="Ver detalles" styleClass="btn" />
+                </div>
+            </div>
+        </section>
+    </main>
+</h:body>
+</html>
