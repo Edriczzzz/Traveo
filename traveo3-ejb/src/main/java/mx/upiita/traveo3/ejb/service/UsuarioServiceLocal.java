@@ -13,4 +13,8 @@ public interface UsuarioServiceLocal {
     void eliminar(Usuario entity);
     Usuario buscarPorCorreo(String correo);
     Usuario login(String correo, String contrasena);
+    void logout();
+    Usuario obtenerUsuarioAutenticado();
+    boolean isUsuarioAutenticado();
+
 }

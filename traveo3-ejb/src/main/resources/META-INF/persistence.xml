@@ -5,6 +5,8 @@
         <class>mx.upiita.traveo3.ejb.model.Aerolinea</class>
         <class>mx.upiita.traveo3.ejb.model.Vuelo</class>
         <class>mx.upiita.traveo3.ejb.model.Usuario</class>
+        <class>mx.upiita.traveo3.ejb.model.Ruta</class>
+        <class>mx.upiita.traveo3.ejb.model.Ciudad</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
 
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>

@@ -1,10 +1,16 @@
 mx\upiita\traveo3\ejb\service\AerolineaServiceLocal.class
 mx\upiita\traveo3\ejb\service\UsuarioServiceLocal.class
-mx\upiita\traveo3\ejb\model\Vuelo.class
 mx\upiita\traveo3\ejb\service\AbstractFacade.class
 mx\upiita\traveo3\ejb\service\AerolineaServiceImpl.class
 mx\upiita\traveo3\ejb\service\VueloServiceImpl.class
 mx\upiita\traveo3\ejb\model\Aerolinea.class
+mx\upiita\traveo3\ejb\model\Ciudad.class
+mx\upiita\traveo3\ejb\service\RutaServiceImpl.class
+mx\upiita\traveo3\ejb\service\RutaServiceLocal.class
+mx\upiita\traveo3\ejb\model\Ruta.class
+mx\upiita\traveo3\ejb\model\Vuelo.class
+mx\upiita\traveo3\ejb\service\CiudadServiceImpl.class
 mx\upiita\traveo3\ejb\model\Usuario.class
+mx\upiita\traveo3\ejb\service\CiudadServiceLocal.class
 mx\upiita\traveo3\ejb\service\VueloServiceLocal.class
 mx\upiita\traveo3\ejb\service\UsuarioServiceImpl.class

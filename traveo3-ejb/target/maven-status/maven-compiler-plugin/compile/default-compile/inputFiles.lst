@@ -1,9 +1,15 @@
 C:\Users\edric\IdeaProjects\Traveo3\traveo3-ejb\src\main\java\mx\upiita\traveo3\ejb\model\Aerolinea.java
+C:\Users\edric\IdeaProjects\Traveo3\traveo3-ejb\src\main\java\mx\upiita\traveo3\ejb\model\Ciudad.java
+C:\Users\edric\IdeaProjects\Traveo3\traveo3-ejb\src\main\java\mx\upiita\traveo3\ejb\model\Ruta.java
 C:\Users\edric\IdeaProjects\Traveo3\traveo3-ejb\src\main\java\mx\upiita\traveo3\ejb\model\Usuario.java
 C:\Users\edric\IdeaProjects\Traveo3\traveo3-ejb\src\main\java\mx\upiita\traveo3\ejb\model\Vuelo.java
 C:\Users\edric\IdeaProjects\Traveo3\traveo3-ejb\src\main\java\mx\upiita\traveo3\ejb\service\AbstractFacade.java
 C:\Users\edric\IdeaProjects\Traveo3\traveo3-ejb\src\main\java\mx\upiita\traveo3\ejb\service\AerolineaServiceImpl.java
 C:\Users\edric\IdeaProjects\Traveo3\traveo3-ejb\src\main\java\mx\upiita\traveo3\ejb\service\AerolineaServiceLocal.java
+C:\Users\edric\IdeaProjects\Traveo3\traveo3-ejb\src\main\java\mx\upiita\traveo3\ejb\service\CiudadServiceImpl.java
+C:\Users\edric\IdeaProjects\Traveo3\traveo3-ejb\src\main\java\mx\upiita\traveo3\ejb\service\CiudadServiceLocal.java
+C:\Users\edric\IdeaProjects\Traveo3\traveo3-ejb\src\main\java\mx\upiita\traveo3\ejb\service\RutaServiceImpl.java
+C:\Users\edric\IdeaProjects\Traveo3\traveo3-ejb\src\main\java\mx\upiita\traveo3\ejb\service\RutaServiceLocal.java
 C:\Users\edric\IdeaProjects\Traveo3\traveo3-ejb\src\main\java\mx\upiita\traveo3\ejb\service\UsuarioServiceImpl.java
 C:\Users\edric\IdeaProjects\Traveo3\traveo3-ejb\src\main\java\mx\upiita\traveo3\ejb\service\UsuarioServiceLocal.java
 C:\Users\edric\IdeaProjects\Traveo3\traveo3-ejb\src\main\java\mx\upiita\traveo3\ejb\service\VueloServiceImpl.java
