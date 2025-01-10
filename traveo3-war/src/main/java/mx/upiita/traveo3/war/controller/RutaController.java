@@ -123,17 +123,6 @@ public class RutaController implements Serializable {
                 Vuelo vueloIdaPersistido = vueloService.crear(vueloIda);
                 logger.info("Vuelo de ida creado con ID: " + vueloIdaPersistido.getIdVuelo());
 
-                // Crear y persistir el vuelo de regreso
-                Vuelo vueloRegreso = new Vuelo();
-                vueloRegreso.setRuta(nuevaRuta);
-                vueloRegreso.setFechaSalida(fechaRegreso);
-                vueloRegreso.setFechaLlegada(fechaRegreso);
-                vueloRegreso.setEstado("Programado");
-                vueloRegreso.setNumeroVuelo("Vuelo-REG-" + nuevaRuta.getIdRuta());
-                vueloRegreso.setPrecio(generarPrecioAleatorio());
-                vueloRegreso.setAerolinea(aerolineaSeleccionada);
-                Vuelo vueloRegresoPersistido = vueloService.crear(vueloRegreso);
-                logger.info("Vuelo de regreso creado con ID: " + vueloRegresoPersistido.getIdVuelo());
 
                 // Crear la relación usuario-vuelo para el vuelo de ida
                 try {
