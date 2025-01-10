@@ -1,15 +1,21 @@
 package mx.upiita.traveo3.war.controller;
 
 import jakarta.annotation.PostConstruct;
+import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import jakarta.servlet.http.HttpSession;
 import mx.upiita.traveo3.ejb.model.Ruta;
+import mx.upiita.traveo3.ejb.model.Usuario;
 import mx.upiita.traveo3.ejb.model.Vuelo;
+import mx.upiita.traveo3.ejb.model.Registro;
+import mx.upiita.traveo3.ejb.service.RegistroServiceLocal;
 import mx.upiita.traveo3.ejb.service.RutaServiceLocal;
 import mx.upiita.traveo3.ejb.service.VueloServiceLocal;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
@@ -26,14 +32,19 @@ public class VueloController implements Serializable {
     @Inject
     private RutaServiceLocal rutaService;
 
+    @Inject
+    private RegistroServiceLocal registroService;
+
     private List<Ruta> rutas;
     private Vuelo nuevoVuelo;
     private Integer idRutaSeleccionada;
+    private List<Vuelo> vuelosUsuario;
 
     @PostConstruct
     public void init() {
         nuevoVuelo = new Vuelo();
         cargarRutas();
+        cargarVuelosUsuario();
     }
 
     public void cargarRutas() {
@@ -79,6 +90,29 @@ public class VueloController implements Serializable {
         }
     }
 
+    public void cargarVuelosUsuario() {
+        try {
+            HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+                    .getExternalContext().getSession(false);
+            Usuario usuarioAutenticado = (Usuario) session.getAttribute("authenticatedUser ");
+
+            if (usuarioAutenticado != null) {
+                List<Registro> relacionesRegistro = registroService.buscarPorUsuarioId(usuarioAutenticado.getIdUsuario());
+
+                vuelosUsuario = new ArrayList<>();
+                for (Registro usuarioVuelo : relacionesRegistro) {
+                    vuelosUsuario.add(usuarioVuelo.getVuelo());
+                }
+
+                logger.info("Vuelos cargados para el usuario: " + usuarioAutenticado.getIdUsuario() +
+                        ", Total vuelos: " + vuelosUsuario.size());
+            }
+        } catch (Exception e) {
+            logger.severe("Error al cargar los vuelos del usuario: " + e.getMessage());
+            vuelosUsuario = new ArrayList<>();
+        }
+    }
+
     public List<Ruta> getRutas() {
         return rutas;
     }
@@ -97,5 +131,12 @@ public class VueloController implements Serializable {
 
     public void setIdRutaSeleccionada(Integer idRutaSeleccionada) {
         this.idRutaSeleccionada = idRutaSeleccionada;
+    }
+    public List<Vuelo> getVuelosUsuario() {
+        return vuelosUsuario;
+    }
+
+    public void setVuelosUsuario(List<Vuelo> vuelosUsuario) {
+        this.vuelosUsuario = vuelosUsuario;
     }
 }
