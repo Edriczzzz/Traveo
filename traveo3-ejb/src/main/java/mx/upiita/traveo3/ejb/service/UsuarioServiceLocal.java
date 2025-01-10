@@ -9,7 +9,7 @@ import java.util.List;
 public interface UsuarioServiceLocal {
     List<Usuario> listar();
     Usuario crear(Usuario entity);
-    Usuario actualizar(Usuario entity);
+    Usuario actualizar(Usuario entity, Integer vueloId);
     void eliminar(Usuario entity);
     Usuario buscarPorCorreo(String correo);
     Usuario login(String correo, String contrasena);

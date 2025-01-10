@@ -2,13 +2,14 @@ package mx.upiita.traveo3.ejb.service;
 
 import jakarta.ejb.Stateless;
 import jakarta.faces.context.FacesContext;
-import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.NoResultException;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 import mx.upiita.traveo3.ejb.model.Usuario;
+import mx.upiita.traveo3.ejb.model.Vuelo;
+
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,6 +21,8 @@ public class UsuarioServiceImpl extends AbstractFacade implements UsuarioService
     private static final String USER_SESSION_KEY = "authenticatedUser";
 
     private Logger logger = Logger.getLogger(UsuarioServiceImpl.class.getName());
+
+
 
     @PersistenceContext(name = "Traveo2PU")
     private EntityManager em;
@@ -45,11 +48,41 @@ public class UsuarioServiceImpl extends AbstractFacade implements UsuarioService
         entity.setVuelo(null);
         return (Usuario) super.create(entity);
     }
+    @Transactional
+    public Usuario actualizar(Usuario usuario, Integer vueloId) {
+        logger.info("Buscando usuario con ID: " + usuario.getIdUsuario());
 
-    @Override
-    public Usuario actualizar(Usuario entity) {
-        return (Usuario) super.actualizar(entity);
+        try {
+            Usuario usuarioExistente = em.createQuery("SELECT u FROM Usuario u WHERE u.idUsuario = :id", Usuario.class)
+                    .setParameter("id", usuario.getIdUsuario())
+                    .getSingleResult();
+
+            if (usuarioExistente == null) {
+                throw new IllegalArgumentException("Usuario no encontrado con ID: " + usuario.getIdUsuario());
+            }
+
+            // Forzar sincronización con la base de datos
+            em.refresh(usuarioExistente);
+
+            // Si el vueloId no es null, asignar el vuelo al usuario
+            if (vueloId != null) {
+                Vuelo vuelo = em.find(Vuelo.class, vueloId);
+                if (vuelo != null) {
+                    usuarioExistente.setVuelo(vuelo);
+                    logger.info("Vuelo asignado al usuario con ID: " + usuario.getIdUsuario());
+                } else {
+                    throw new IllegalArgumentException("Vuelo no encontrado con ID: " + vueloId);
+                }
+            }
+
+            // Guardar los cambios
+            em.merge(usuarioExistente);
+            return usuarioExistente;
+        } catch (NoResultException e) {
+            throw new IllegalArgumentException("Usuario no encontrado con ID: " + usuario.getIdUsuario());
+        }
     }
+
 
     @Override
     public void eliminar(Usuario entity) {
@@ -78,14 +111,16 @@ public class UsuarioServiceImpl extends AbstractFacade implements UsuarioService
                     .setParameter("contrasena", contrasena)
                     .getSingleResult();
 
-            if (usuario != null) {
-                // Almacenar el usuario en la sesión
-                HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-                        .getExternalContext().getSession(true);
-                session.setAttribute(USER_SESSION_KEY, usuario.getIdUsuario());
-                logger.info("Usuario autenticado correctamente: " + usuario.getCorreo());
-            }
 
+                if (usuario != null) {
+                    logger.info("Usuario autenticado: " + correo);
+                    // Almacenar el usuario en la sesión
+                    HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+                    session.setAttribute("authenticatedUser ", usuario);
+                } else {
+                    logger.warning("Credenciales inválidas para: " + correo);
+                    return null; // Permitir que la página se recargue para mostrar el mensaje
+                }
             return usuario;
         } catch (NoResultException e) {
             logger.warning("Intento de login fallido para correo: " + correo);

@@ -2,9 +2,14 @@
 package mx.upiita.traveo3.war.controller;
 
 import jakarta.annotation.PostConstruct;
+import jakarta.ejb.EJBException;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import jakarta.persistence.OptimisticLockException;
+import jakarta.servlet.http.HttpSession;
 import mx.upiita.traveo3.ejb.model.*;
         import mx.upiita.traveo3.ejb.service.*;
 
@@ -33,6 +38,9 @@ public class RutaController implements Serializable {
 
     @Inject
     private AerolineaServiceLocal aerolineaService;
+
+    @Inject
+    private RegistroServiceLocal usuarioVueloService;
 
     private List<Ciudad> ciudades;
     private Integer idCiudadOrigen;
@@ -68,14 +76,13 @@ public class RutaController implements Serializable {
             e.printStackTrace();
         }
     }
-
     public void guardarRutaYVuelo() {
         try {
             // Verificar si hay un usuario autenticado antes de continuar
-            Usuario usuarioAutenticado = usuarioService.obtenerUsuarioAutenticado();
+            HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+            Usuario usuarioAutenticado = (Usuario) session.getAttribute("authenticatedUser ");
             if (usuarioAutenticado == null) {
                 logger.severe("No hay usuario autenticado para crear la ruta y vuelo");
-                // Aquí podrías agregar código para mostrar un mensaje al usuario
                 return;
             }
 
@@ -128,20 +135,19 @@ public class RutaController implements Serializable {
                 Vuelo vueloRegresoPersistido = vueloService.crear(vueloRegreso);
                 logger.info("Vuelo de regreso creado con ID: " + vueloRegresoPersistido.getIdVuelo());
 
-                // Asignar el vuelo de ida al usuario y actualizar
+                // Crear la relación usuario-vuelo para el vuelo de ida
                 try {
-                    usuarioAutenticado.setVuelo(vueloIdaPersistido);
-                    Usuario usuarioActualizado = usuarioService.actualizar(usuarioAutenticado);
-                    if (usuarioActualizado != null) {
-                        logger.info("Vuelo asignado y usuario actualizado: " + usuarioActualizado.getCorreo());
-                    } else {
-                        logger.severe("Error al actualizar el usuario con el vuelo");
-                    }
-                    logger.info("Vuelo asignado al usuario con ID: " + usuarioAutenticado.getIdUsuario());
+                    Registro usuarioVuelo = new Registro();
+                    usuarioVuelo.setUsuario(usuarioAutenticado);
+                    usuarioVuelo.setVuelo(vueloIdaPersistido);
+                    usuarioVueloService.crear(usuarioVuelo);
+                    logger.info("Relación Usuario-Vuelo creada para el vuelo de ida: Usuario ID " +
+                            usuarioAutenticado.getIdUsuario() + ", Vuelo ID " + vueloIdaPersistido.getIdVuelo());
                 } catch (Exception e) {
-                    logger.severe("Error al actualizar el usuario con el vuelo: " + e.getMessage());
-                    // Aquí podrías agregar código para mostrar un mensaje de error al usuario
-                    throw e;
+                    logger.severe("Error al crear la relación Usuario-Vuelo para el vuelo de ida: " + e.getMessage());
+                    FacesContext.getCurrentInstance().addMessage(null,
+                            new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+                                    "Error al asociar el usuario con el vuelo de ida."));
                 }
 
                 // Limpiar los campos del formulario
@@ -150,12 +156,10 @@ public class RutaController implements Serializable {
             } else {
                 logger.warning("Datos incompletos: Origen: " + ciudadOrigen + ", Destino: " + ciudadDestino +
                         ", Aerolínea: " + aerolineaSeleccionada);
-                // Aquí podrías agregar código para mostrar un mensaje de error al usuario
             }
         } catch (Exception e) {
             logger.severe("Error al guardar la ruta y vuelos: " + e.getMessage());
             e.printStackTrace();
-            // Aquí podrías agregar código para mostrar un mensaje de error al usuario
         }
     }
 

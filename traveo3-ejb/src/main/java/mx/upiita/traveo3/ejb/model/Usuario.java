@@ -14,6 +14,7 @@ import java.util.Objects;
 public class Usuario implements Serializable {
     private static final long serialVersionUID = 1L;
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -53,7 +54,13 @@ public class Usuario implements Serializable {
     @JoinColumn(name = "ID_vuelo", nullable = false)
     private Vuelo vuelo;
 
-    public Usuario(Integer idUsuario, String nombre, String correo, String telefono, String contrasena, Date fechaRegistro, Date fechaNacimiento, String asiento, double montoPagado, Vuelo vuelo) {
+    @Version
+    @Column(name = "version")
+    private Integer version;
+
+
+
+    public Usuario(Integer idUsuario, String nombre, String correo, String telefono, String contrasena, Date fechaRegistro, Date fechaNacimiento, String asiento, double montoPagado, Vuelo vuelo, Integer version) {
         this.idUsuario = idUsuario;
         this.nombre = nombre;
         this.correo = correo;
@@ -64,6 +71,7 @@ public class Usuario implements Serializable {
         this.asiento = asiento;
         this.montoPagado = montoPagado;
         this.vuelo = vuelo;
+        this.version = version;
     }
 
     public Usuario() {
@@ -94,20 +102,20 @@ public class Usuario implements Serializable {
         this.correo = correo;
     }
 
-    public @Size(max = 255) String getContrasena() {
-        return contrasena;
-    }
-
-    public void setContrasena(@Size(max = 255) String contrasena) {
-        this.contrasena = contrasena;
-    }
-
     public @Size(max = 15) String getTelefono() {
         return telefono;
     }
 
     public void setTelefono(@Size(max = 15) String telefono) {
         this.telefono = telefono;
+    }
+
+    public @Size(max = 255) String getContrasena() {
+        return contrasena;
+    }
+
+    public void setContrasena(@Size(max = 255) String contrasena) {
+        this.contrasena = contrasena;
     }
 
     public Date getFechaRegistro() {
@@ -150,16 +158,24 @@ public class Usuario implements Serializable {
         this.vuelo = vuelo;
     }
 
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Usuario usuario = (Usuario) o;
-        return Double.compare(montoPagado, usuario.montoPagado) == 0 && Objects.equals(idUsuario, usuario.idUsuario) && Objects.equals(nombre, usuario.nombre) && Objects.equals(correo, usuario.correo) && Objects.equals(telefono, usuario.telefono) && Objects.equals(contrasena, usuario.contrasena) && Objects.equals(fechaRegistro, usuario.fechaRegistro) && Objects.equals(fechaNacimiento, usuario.fechaNacimiento) && Objects.equals(asiento, usuario.asiento) && Objects.equals(vuelo, usuario.vuelo);
+        return Double.compare(montoPagado, usuario.montoPagado) == 0 && Objects.equals(idUsuario, usuario.idUsuario) && Objects.equals(nombre, usuario.nombre) && Objects.equals(correo, usuario.correo) && Objects.equals(telefono, usuario.telefono) && Objects.equals(contrasena, usuario.contrasena) && Objects.equals(fechaRegistro, usuario.fechaRegistro) && Objects.equals(fechaNacimiento, usuario.fechaNacimiento) && Objects.equals(asiento, usuario.asiento) && Objects.equals(vuelo, usuario.vuelo) && Objects.equals(version, usuario.version);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idUsuario, nombre, correo, telefono, contrasena, fechaRegistro, fechaNacimiento, asiento, montoPagado, vuelo);
+        return Objects.hash(idUsuario, nombre, correo, telefono, contrasena, fechaRegistro, fechaNacimiento, asiento, montoPagado, vuelo, version);
     }
 }
