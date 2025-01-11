@@ -47,4 +47,11 @@ public class VueloServiceImpl extends AbstractFacade implements VueloServiceLoca
     public void eliminar(Vuelo entity) {
 
     }
+    @Override
+    public List<Vuelo> obtenerPrimerosVuelos(int cantidad) {
+        logger.log(Level.INFO, "Consultando los primeros {0} vuelos", cantidad);
+        return em.createQuery("SELECT v FROM Vuelo v ORDER BY v.idVuelo", Vuelo.class)
+                .setMaxResults(cantidad)
+                .getResultList();
+    }
 }

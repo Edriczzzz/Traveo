@@ -114,12 +114,11 @@ public class UsuarioServiceImpl extends AbstractFacade implements UsuarioService
 
                 if (usuario != null) {
                     logger.info("Usuario autenticado: " + correo);
-                    // Almacenar el usuario en la sesión
                     HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
                     session.setAttribute("authenticatedUser ", usuario);
                 } else {
                     logger.warning("Credenciales inválidas para: " + correo);
-                    return null; // Permitir que la página se recargue para mostrar el mensaje
+                    return null;
                 }
             return usuario;
         } catch (NoResultException e) {

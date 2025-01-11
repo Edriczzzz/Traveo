@@ -1,6 +1,7 @@
 <ui:composition template="/WEB-INF/template/plantilla.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
         <meta charset="UTF-8"/>
@@ -9,9 +10,58 @@
 
 
     <ui:define name="contenido">
+        <div class="card">
+            <h2 class="text-center text-primary">¡Ofertas Especiales!</h2>
+            <p class="text-center mb-5">Descubre nuestras mejores ofertas de vuelos</p>
 
-        <main>
-            oferta
-        </main>
+            <h:form id="ofertasForm">
+                <div class="grid">
+                    <!-- Usando los primeros 3 elementos de la lista de vuelos -->
+                    <ui:repeat value="#{vueloController.vuelos.subList(0,3)}" var="vuelo">
+                        <div class="col-12 md:col-4">
+                            <p:card style="margin: 1em">
+                                <f:facet name="title">
+                                    #{vuelo.ruta.ciudadOrigen.nombre} → #{vuelo.ruta.ciudadDestino.nombre}
+                                </f:facet>
+
+                                <f:facet name="subtitle">
+                                    Vuelo #{vuelo.numeroVuelo}
+                                </f:facet>
+
+                                <p:divider />
+
+                                <h:panelGrid columns="2" cellpadding="5">
+                                    <h:outputText value="Aerolínea:" />
+                                    <h:outputText value="#{vuelo.aerolinea.nombre}"
+                                                  style="font-weight: bold"/>
+
+                                    <h:outputText value="Salida:" />
+                                    <h:outputText value="#{vuelo.fechaSalida}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                    </h:outputText>
+
+                                    <h:outputText value="Llegada:" />
+                                    <h:outputText value="#{vuelo.fechaLlegada}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                    </h:outputText>
+
+                                    <h:outputText value="Precio:" />
+                                    <h:outputText value="$#{vuelo.precio}"
+                                                  style="color: #2196F3; font-size: 1.5em; font-weight: bold">
+                                        <f:convertNumber pattern="#,##0.00" />
+                                    </h:outputText>
+                                </h:panelGrid>
+
+                                <f:facet name="footer">
+                                    <p:commandButton value="Reservar Ahora"
+                                                     icon="pi pi-check"
+                                                     styleClass="ui-button-primary"/>
+                                </f:facet>
+                            </p:card>
+                        </div>
+                    </ui:repeat>
+                </div>
+            </h:form>
+        </div>
     </ui:define>
 </ui:composition>

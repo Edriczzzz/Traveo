@@ -40,11 +40,16 @@ public class VueloController implements Serializable {
     private Integer idRutaSeleccionada;
     private List<Vuelo> vuelosUsuario;
 
+    private List<Vuelo> vuelosOferta;
+    private List<Vuelo> vuelos;
+
+
     @PostConstruct
     public void init() {
         nuevoVuelo = new Vuelo();
         cargarRutas();
         cargarVuelosUsuario();
+        cargarOfertas();
     }
 
     public void cargarRutas() {
@@ -113,6 +118,16 @@ public class VueloController implements Serializable {
         }
     }
 
+    public void cargarOfertas() {
+        try {
+            vuelos = vueloService.listar(); // Asegúrate de que esta línea esté correctamente configurada
+            logger.info("Vuelos cargados: " + vuelos.size());
+        } catch (Exception e) {
+            logger.severe("Error al cargar los vuelos: " + e.getMessage());
+        }
+    }
+
+
     public List<Ruta> getRutas() {
         return rutas;
     }
@@ -138,5 +153,16 @@ public class VueloController implements Serializable {
 
     public void setVuelosUsuario(List<Vuelo> vuelosUsuario) {
         this.vuelosUsuario = vuelosUsuario;
+    }
+
+    public List<Vuelo> getVuelosOferta() {
+        return vuelosOferta;
+    }
+
+    public void setVuelosOferta(List<Vuelo> vuelosOferta) {
+        this.vuelosOferta = vuelosOferta;
+    }
+    public List<Vuelo> getVuelos() {
+        return vuelos; // Asegúrate de tener este getter
     }
 }

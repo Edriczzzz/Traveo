@@ -31,11 +31,6 @@
                     <p:column headerText="País">
                         <h:outputText value="#{aerolinea.pais}" />
                     </p:column>
-                    <p:column headerText="Acciones">
-                        <p:commandButton value="Eliminar" icon="pi pi-trash"
-                                         action="#{aerolineaController.eliminarAerolinea(aerolinea)}"
-                                         update=":formAerolineas:tablaAerolineas" />
-                    </p:column>
                 </p:dataTable>
 
             </h:form>
