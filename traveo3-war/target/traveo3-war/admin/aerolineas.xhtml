@@ -1,0 +1,68 @@
+<ui:composition template="/WEB-INF/template-admin/plantilla-admin.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <meta charset="UTF-8"/>
+        <link rel="stylesheet" href="/resources/css/inicio.css" />
+    </h:head>
+
+    <ui:define name="contenido">
+        <h:body>
+            <h:form id="aerolineasForm">
+                <p:toolbar>
+                    <p:toolbarGroup>
+                        <p:commandButton value="Agregar Aerolínea"
+                                         action="#{aerolineaController.init()}"
+                                         update=":aerolineasForm"
+                                         oncomplete="PF('aerolineaDialog').show();"
+                                         />
+                    </p:toolbarGroup>
+                </p:toolbar>
+
+                <p:dataTable id="aerolineasTable" value="#{aerolineaController.aerolineas}" var="aerolinea">
+                    <p:column headerText="Nombre">
+                        <h:outputText value="#{aerolinea.nombre}" />
+                    </p:column>
+                    <p:column headerText="Código">
+                        <h:outputText value="#{aerolinea.codigo}" />
+                    </p:column>
+                    <p:column headerText="País">
+                        <h:outputText value="#{aerolinea.pais}" />
+                    </p:column>
+                    <p:column>
+                        <p:commandButton value="Editar"
+                                         action="#{aerolineaController.cargarAerolinea(aerolinea)}"
+                                         update=":aerolineasForm"
+                                         oncomplete="PF('aerolineaDialog').show()" />
+                        <p:commandButton value="Eliminar"
+                                         action="#{aerolineaController.eliminarAerolinea(aerolinea)}"
+                                         update=":aerolineasForm"
+                                         oncomplete="PF('aerolineasTable').filter()" />
+
+
+                    </p:column>
+                </p:dataTable>
+
+                <p:dialog header="Agregar/Editar Aerolínea" widgetVar="aerolineaDialog" modal="true" closable="true" resizable="false">
+                    <h:panelGrid columns="2">
+                        <h:outputLabel for="nombre" value="Nombre:" />
+                        <p:inputText id="nombre" value="#{aerolineaController.aerolineaSeleccionada.nombre}" required="true" />
+
+                        <h:outputLabel for="codigo" value="Código:" />
+                        <p:inputText id="codigo" value="#{aerolineaController.aerolineaSeleccionada.codigo}" required="true" />
+
+                        <h:outputLabel for="pais" value="País:" />
+                        <p:inputText id="pais" value="#{aerolineaController.aerolineaSeleccionada.pais}" required="true" />
+                    </h:panelGrid>
+
+                    <p:commandButton value="Guardar"
+                                     action="#{aerolineaController.guardarAerolinea()}"
+                                     update=":aerolineasForm:aerolineasTable"
+                                     oncomplete="PF('aerolineaDialog').hide()" />
+                </p:dialog>
+            </h:form>
+        </h:body>
+    </ui:define>
+</ui:composition>

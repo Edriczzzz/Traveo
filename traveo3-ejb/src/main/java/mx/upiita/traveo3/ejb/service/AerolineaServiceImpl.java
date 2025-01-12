@@ -35,7 +35,8 @@ public class AerolineaServiceImpl extends AbstractFacade implements AerolineaSer
 
     @Override
     public Aerolinea crear(Aerolinea entity) {
-        return (Aerolinea) super.create(entity);
+        em.persist(entity);
+        return entity;
     }
 
     @Override
@@ -45,6 +46,8 @@ public class AerolineaServiceImpl extends AbstractFacade implements AerolineaSer
 
     @Override
     public void eliminar(Aerolinea entity) {
-
+        if (entity != null) {
+            em.remove(em.contains(entity) ? entity : em.merge(entity));
+        }
     }
 }

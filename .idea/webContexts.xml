@@ -3,6 +3,8 @@
   <component name="WebContextManager">
     <option name="state">
       <map>
+        <entry key="file://$PROJECT_DIR$/traveo3-war/src/main/webapp/admin/ciudades.xhtml" value="file://$PROJECT_DIR$/traveo3-war/src/main/webapp/admin" />
+        <entry key="file://$PROJECT_DIR$/traveo3-war/src/main/webapp/admin/vuelos.xhtml" value="file://$PROJECT_DIR$/traveo3-war/src/main/webapp/admin" />
         <entry key="file://$PROJECT_DIR$/traveo3-war/src/main/webapp/paginas/vuelos.xhtml" value="file://$PROJECT_DIR$/traveo3-war/src/main/webapp/paginas" />
       </map>
     </option>

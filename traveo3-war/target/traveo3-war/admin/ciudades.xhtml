@@ -1,0 +1,65 @@
+<ui:composition template="/WEB-INF/template-admin/plantilla-admin.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <meta charset="UTF-8"/>
+        <link rel="stylesheet" href="/resources/css/inicio.css" />
+    </h:head>
+
+    <ui:define name="contenido">
+        <h:body>
+            <h:form id="ciudadesForm">
+                <p:toolbar>
+                    <p:toolbarGroup>
+                        <p:commandButton value="Agregar Ciudad"
+                                         action="#{ciudadController.init()}"
+                                         update=":ciudadesForm"
+                                         oncomplete="PF('ciudadDialog').show();" />
+                    </p:toolbarGroup>
+                </p:toolbar>
+
+                <p:dataTable id="ciudadesTable" value="#{ciudadController.ciudades}" var="ciudad">
+                    <p:column headerText="Nombre">
+                        <h:outputText value="#{ciudad.nombre}" />
+                    </p:column>
+                    <p:column headerText="Código">
+                        <h:outputText value="#{ciudad.codigo}" />
+                    </p:column>
+                    <p:column headerText="País">
+                        <h:outputText value="#{ciudad.pais}" />
+                    </p:column>
+                    <p:column>
+                        <p:commandButton value="Editar"
+                                         action="#{ciudadController.cargarCiudad(ciudad)}"
+                                         update=":ciudadesForm"
+                                         oncomplete="PF('ciudadDialog').show()" />
+                        <p:commandButton value="Eliminar"
+                                         action="#{ciudadController.eliminarCiudad(ciudad)}"
+                                         update=":ciudadesForm"
+                                         oncomplete="PF('ciudadesTable').filter()" />
+                    </p:column>
+                </p:dataTable>
+
+                <p:dialog header="Agregar/Editar Ciudad" widgetVar="ciudadDialog" modal="true" closable="true" resizable="false">
+                    <h:panelGrid columns="2">
+                        <h:outputLabel for="nombre" value="Nombre:" />
+                        <p:inputText id="nombre" value="#{ciudadController.nuevaCiudad.nombre}" required="true" />
+
+                        <h:outputLabel for="codigo" value="Código:" />
+                        <p:inputText id="codigo" value="#{ciudadController.nuevaCiudad.codigo}" required="true" />
+
+                        <h:outputLabel for="pais" value="País:" />
+                        <p:inputText id="pais" value="#{ciudadController.nuevaCiudad.pais}" required="true" />
+                    </h:panelGrid>
+
+                    <p:commandButton value="Guardar"
+                                     action="#{ciudadController.guardarCiudad()}"
+                                     update=":ciudadesForm:ciudadesTable"
+                                     oncomplete="PF('ciudadDialog').hide()" />
+                </p:dialog>
+            </h:form>
+        </h:body>
+    </ui:define>
+</ui:composition>
