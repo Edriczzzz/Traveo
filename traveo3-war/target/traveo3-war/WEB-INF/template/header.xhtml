@@ -7,11 +7,14 @@
     <div class="header-top">
         <div class="logo">
 
-                <h:graphicImage value="/resources/img/logo.png" alt="Traveo Logo" styleClass="logo-img"/>
+            <h:link outcome="/cliente/inicio">
+                <h:graphicImage value="/resources/img/logo.png" alt="Inicio" />
+            </h:link>
+
         </div>
         <div class="user-profile">
             <h:graphicImage value="/resources/img/profile-user.png" styleClass="profile-img"/>
-            <span class="user-name">Juan Pérez</span>
+            <span class="user-name">#{usuarioController.nombreHeader}</span>
         </div>
     </div>
 
@@ -20,16 +23,16 @@
         <h:form>
             <ul class="nav-links">
                 <li>
-                    <h:link outcome="/paginas/vuelos" value="Vuelos"/>
+                    <h:link outcome="/cliente/vuelos" value="Vuelos"/>
                 </li>
                 <li>
-                    <h:link outcome="/paginas/aerolineas" value="Aerolíneas Populares"/>
+                    <h:link outcome="/cliente/aerolineas" value="Aerolíneas Populares"/>
                 </li>
                 <li>
-                    <h:link outcome="/paginas/ofertas" value="Ofertas"/>
+                    <h:link outcome="/cliente/ofertas" value="Ofertas"/>
                 </li>
                 <li>
-                    <h:link outcome="/paginas/tus-vuelos" value="Tus Vuelos"/>
+                    <h:link outcome="/cliente/tus-vuelos" value="Tus Vuelos"/>
                 </li>
             </ul>
         </h:form>

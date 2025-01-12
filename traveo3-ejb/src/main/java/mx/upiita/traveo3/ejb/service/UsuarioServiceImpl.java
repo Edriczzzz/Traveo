@@ -116,6 +116,7 @@ public class UsuarioServiceImpl extends AbstractFacade implements UsuarioService
                     logger.info("Usuario autenticado: " + correo);
                     HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
                     session.setAttribute("authenticatedUser ", usuario);
+                    session.setAttribute("userRole", usuario.getRol());
                 } else {
                     logger.warning("Credenciales inválidas para: " + correo);
                     return null;
@@ -138,24 +139,18 @@ public class UsuarioServiceImpl extends AbstractFacade implements UsuarioService
         logger.info("Usuario cerró sesión exitosamente");
     }
 
-
     @Override
     public Usuario obtenerUsuarioAutenticado() {
         try {
             HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
                     .getExternalContext().getSession(false);
-
             if (session != null) {
-                Integer userId = (Integer) session.getAttribute(USER_SESSION_KEY);
-                if (userId != null) {
-                    return em.find(Usuario.class, userId);
-                }
+                return (Usuario) session.getAttribute("authenticatedUser ");
             }
-            return null;
         } catch (Exception e) {
             logger.severe("Error al obtener usuario autenticado: " + e.getMessage());
-            return null;
         }
+        return null;
     }
 
 

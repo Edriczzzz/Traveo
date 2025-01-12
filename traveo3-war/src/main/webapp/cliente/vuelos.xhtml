@@ -1,0 +1,59 @@
+
+<ui:composition template="/WEB-INF/template/plantilla.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <meta charset="UTF-8"/>
+        <link rel="stylesheet" href="/resources/css/inicio.css" />
+    </h:head>
+
+    <ui:define name="contenido">
+
+        <h:body>
+            <h:form>
+                <h1>Agendar Ruta y Vuelo</h1>
+
+                <p:panel header="Detalles de la Ruta">
+                    <p:outputLabel for="origen" value="Ciudad Origen:" />
+                    <p:selectOneMenu id="origen" value="#{rutaController.idCiudadOrigen}" required="true">
+                        <f:selectItem itemLabel="Seleccione una ciudad" itemValue="#{null}" noSelectionOption="true" />
+                        <f:selectItems value="#{rutaController.ciudades}" var="ciudad"
+                                       itemValue="#{ciudad.idCiudad}"
+                                       itemLabel="#{ciudad.nombre}" />
+                    </p:selectOneMenu>
+
+                    <p:selectOneMenu id="destino" value="#{rutaController.idCiudadDestino}" required="true">
+                        <f:selectItem itemLabel="Seleccione una ciudad" itemValue="#{null}" noSelectionOption="true" />
+                        <f:selectItems value="#{rutaController.ciudades}" var="ciudad"
+                                       itemValue="#{ciudad.idCiudad}"
+                                       itemLabel="#{ciudad.nombre}" />
+                    </p:selectOneMenu>
+                </p:panel>
+
+                <p:panel header="Detalles del Vuelo">
+                    <p:outputLabel for="salida" value="Fecha de Salida:" />
+                    <p:calendar id="salida" value="#{rutaController.fechaSalida}" required="true" />
+
+                    <p:outputLabel for="regreso" value="Fecha de Regreso:" />
+                    <p:calendar id="regreso" value="#{rutaController.fechaRegreso}" required="true" />
+                </p:panel>
+
+                <p:panel header="Selecciona la Aerolínea">
+                    <p:outputLabel for="aerolinea" value="Aerolínea:" />
+                    <p:selectOneMenu id="aerolinea" value="#{rutaController.idAerolineaSeleccionada}" required="true">
+                        <f:selectItem itemLabel="Seleccione una aerolínea" itemValue="#{null}" noSelectionOption="true" />
+                        <f:selectItems value="#{rutaController.aerolineas}"
+                                       var="aerolinea"
+                                       itemValue="#{aerolinea.id}"
+                                       itemLabel="#{aerolinea.nombre}" />
+                    </p:selectOneMenu>
+                </p:panel>
+
+                <p:commandButton value="Agendar" action="#{rutaController.guardarRutaYVuelo}" update="@form" />
+            </h:form>
+        </h:body>
+    </ui:define>
+</ui:composition>
+

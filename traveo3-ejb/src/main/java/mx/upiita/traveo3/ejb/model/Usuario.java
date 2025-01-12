@@ -58,6 +58,9 @@ public class Usuario implements Serializable {
     @Column(name = "version")
     private Integer version;
 
+    @Enumerated(EnumType.STRING)
+    private Rol rol;
+
 
 
     public Usuario(Integer idUsuario, String nombre, String correo, String telefono, String contrasena, Date fechaRegistro, Date fechaNacimiento, String asiento, double montoPagado, Vuelo vuelo, Integer version) {
@@ -166,6 +169,14 @@ public class Usuario implements Serializable {
         this.version = version;
     }
 
+    public Rol getRol() { // Asegúrate de tener este método
+        return rol;
+    }
+
+    public void setRol(Rol rol) { // Asegúrate de tener este método
+        this.rol = rol;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -177,5 +188,9 @@ public class Usuario implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(idUsuario, nombre, correo, telefono, contrasena, fechaRegistro, fechaNacimiento, asiento, montoPagado, vuelo, version);
+    }
+    public enum Rol {
+        CLIENTE,
+        ADMINISTRADOR
     }
 }

@@ -59,7 +59,11 @@ public class UsuarioController implements Serializable {
                         .getExternalContext()
                         .getSessionMap()
                         .put("usuario", usuarioEncontrado);
-                return "inicio?faces-redirect=true";
+                if (usuarioEncontrado.getRol() == Usuario.Rol.ADMINISTRADOR) {
+                    return "/admin/dashboard?faces-redirect=true"; // Página del administrador
+                } else {
+                    return "/cliente/inicio?faces-redirect=true"; // Página del cliente
+                }
             } else {
                 FacesContext.getCurrentInstance().addMessage(null,
                         new FacesMessage(FacesMessage.SEVERITY_ERROR,
@@ -72,6 +76,11 @@ public class UsuarioController implements Serializable {
                             "Error", "Error al iniciar sesión: " + e.getMessage()));
             return null;
         }
+    }
+
+    public String getNombreHeader(){
+        Usuario usuarioAutenticado = usuarioService.obtenerUsuarioAutenticado();
+        return usuarioAutenticado.getNombre();
     }
 
     public String logout() {
