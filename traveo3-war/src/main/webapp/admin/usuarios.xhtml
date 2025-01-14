@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition template="/WEB-INF/template-admin/plantilla-admin.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <ui:define name="contenido">
+        <h:form id="usuariosForm">
+            <p:growl id="messages" showDetail="true" />
+
+            <p:dataTable id="usuariosTable" var="usuario"
+                         value="#{usuarioController.usuarios}"
+                         selection="#{usuarioController.selectedUsuario}"
+                         rowKey="#{usuario.idUsuario}"
+                         paginator="true" rows="10">
+
+                <p:column headerText="ID">
+                    <h:outputText value="#{usuario.idUsuario}" />
+                </p:column>
+
+                <p:column headerText="Nombre">
+                    <h:outputText value="#{usuario.nombre}" />
+                </p:column>
+
+                <p:column headerText="Correo">
+                    <h:outputText value="#{usuario.correo}" />
+                </p:column>
+
+                <p:column headerText="Teléfono">
+                    <h:outputText value="#{usuario.telefono}" />
+                </p:column>
+
+                <p:column headerText="Rol">
+                    <h:outputText value="#{usuario.rol}" />
+                </p:column>
+
+                <p:column headerText="Acciones">
+                    <p:commandButton icon="pi pi-pencil"
+                                     actionListener="#{usuarioController.prepararEdicion(usuario)}"
+                                     update=":editForm"
+                                     oncomplete="PF('editDialog').show()"
+                                     process="@this">
+                    </p:commandButton>
+
+                    <p:commandButton icon="pi pi-trash"
+                                     actionListener="#{usuarioController.eliminarUsuario(usuario)}"
+                                     update="@form"
+                                     process="@this">
+                        <p:confirm header="Confirmación"
+                                   message="¿Está seguro de eliminar este usuario?"
+                                   icon="pi pi-exclamation-triangle" />
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Sí" type="button"
+                                 styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+                <p:commandButton value="No" type="button"
+                                 styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+            </p:confirmDialog>
+        </h:form>
+
+        <p:dialog id="editDialog" header="Editar Usuario"
+                  widgetVar="editDialog" modal="true"
+                  responsive="true">
+            <h:form id="editForm">
+                <div class="p-fluid">
+                    <div class="p-field">
+                        <p:outputLabel for="nombre" value="Nombre" />
+                        <p:inputText id="nombre" value="#{usuarioController.selectedUsuario.nombre}"
+                                     required="true" />
+                    </div>
+
+                    <div class="p-field">
+                        <p:outputLabel for="correo" value="Correo" />
+                        <p:inputText id="correo" value="#{usuarioController.selectedUsuario.correo}"
+                                     required="true" />
+                    </div>
+
+                    <div class="p-field">
+                        <p:outputLabel for="telefono" value="Teléfono" />
+                        <p:inputMask id="telefono" value="#{usuarioController.selectedUsuario.telefono}"
+                                     mask="(999) 999-9999" />
+                    </div>
+
+                    <div class="p-field">
+                        <p:outputLabel for="rol" value="Rol" />
+                        <p:selectOneMenu id="rol" value="#{usuarioController.selectedUsuario.rol}">
+                            <f:selectItems value="#{usuarioController.roles}" />
+                        </p:selectOneMenu>
+                    </div>
+
+                    <div class="p-field mt-4">
+                        <p:commandButton value="Guardar"
+                                         action="#{usuarioController.actualizarUsuario(usuarioController.selectedUsuario)}"
+                                         update=":usuariosForm:usuariosTable :usuariosForm:messages"
+                                         oncomplete="if (!args.validationFailed) PF('editDialog').hide()"
+                                         styleClass="mr-2" />
+                        <p:commandButton value="Cancelar"
+                                         onclick="PF('editDialog').hide()"
+                                         type="button"
+                                         styleClass="ui-button-secondary" />
+                    </div>
+                </div>
+            </h:form>
+        </p:dialog>
+    </ui:define>
+</ui:composition>

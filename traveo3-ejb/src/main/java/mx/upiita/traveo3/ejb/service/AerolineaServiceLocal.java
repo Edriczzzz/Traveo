@@ -11,4 +11,6 @@ public interface AerolineaServiceLocal {
     public Aerolinea crear(Aerolinea entity);
     public Aerolinea actualizar(Aerolinea entity);
     public void eliminar(Aerolinea entity);
+    Aerolinea buscarPorId(Integer idAerolinea);
+
 }

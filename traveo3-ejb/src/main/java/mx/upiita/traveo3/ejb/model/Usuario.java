@@ -80,6 +80,10 @@ public class Usuario implements Serializable {
     public Usuario() {
 
     }
+    public enum Rol {
+        CLIENTE,
+        ADMINISTRADOR
+    }
 
     public Integer getIdUsuario() {
         return idUsuario;
@@ -189,8 +193,5 @@ public class Usuario implements Serializable {
     public int hashCode() {
         return Objects.hash(idUsuario, nombre, correo, telefono, contrasena, fechaRegistro, fechaNacimiento, asiento, montoPagado, vuelo, version);
     }
-    public enum Rol {
-        CLIENTE,
-        ADMINISTRADOR
-    }
+
 }

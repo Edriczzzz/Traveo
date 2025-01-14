@@ -6,40 +6,43 @@
 
 <h:head>
     <title>Login - Traveo</title>
+    <meta charset="UTF-8"/>
+    <h:outputStylesheet library="css" name="login.css"/>
 </h:head>
 
+
 <h:body>
-    <div class="card">
+    <div class="login-container">
         <h:form>
             <p:panel header="Iniciar Sesión">
-                <p:messages showDetail="true"/>
+                <p:messages showDetail="true" />
 
                 <h:panelGrid columns="2" cellpadding="5">
-                    <p:outputLabel for="correo" value="Correo:"/>
+                    <p:outputLabel for="correo" value="Correo:" />
                     <p:inputText id="correo"
                                  value="#{usuarioController.correo}"
                                  required="true"
-                                 requiredMessage="El correo es requerido"/>
+                                 requiredMessage="El correo es requerido" />
 
-                    <p:outputLabel for="contrasena" value="Contraseña:"/>
+                    <p:outputLabel for="contrasena" value="Contraseña:" />
                     <p:password id="contrasena"
                                 value="#{usuarioController.contrasena}"
                                 required="true"
                                 requiredMessage="La contraseña es requerida"
                                 feedback="true"
-                                toggleMask="true"/>
+                                toggleMask="true" />
                 </h:panelGrid>
 
-                <p:divider/>
+                <p:divider />
 
                 <p:commandButton value="Iniciar Sesión"
                                  action="#{usuarioController.login}"
                                  update="@form"
                                  icon="pi pi-sign-in"
-                                 styleClass="mt-3"/>
+                                 styleClass="mt-3" />
 
-                <p:link outcome="register" value="¿No tienes cuenta? Regístrate aquí"
-                        styleClass="block mt-3"/>
+                <p:link outcome="register" value="¿No tienes cuenta?"
+                        styleClass="block mt-3" />
             </p:panel>
         </h:form>
     </div>

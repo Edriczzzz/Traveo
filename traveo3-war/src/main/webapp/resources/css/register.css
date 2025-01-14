@@ -1,0 +1,26 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f4f4f9;
+    font-family: Arial, sans-serif;
+}
+.register-container {
+    display: flex;
+    width: 70%;
+    max-width: 900px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    background: white;
+}
+.register-image {
+    flex: 1;
+    background: url('/resources/img/imagenpais1.png') center/cover no-repeat;
+}
+.register-form {
+    flex: 2;
+    padding: 20px;
+}

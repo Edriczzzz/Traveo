@@ -48,45 +48,95 @@ public class UsuarioServiceImpl extends AbstractFacade implements UsuarioService
         entity.setVuelo(null);
         return (Usuario) super.create(entity);
     }
+
+    @Override
     @Transactional
     public Usuario actualizar(Usuario usuario, Integer vueloId) {
-        logger.info("Buscando usuario con ID: " + usuario.getIdUsuario());
-
         try {
-            Usuario usuarioExistente = em.createQuery("SELECT u FROM Usuario u WHERE u.idUsuario = :id", Usuario.class)
+            if (usuario == null || usuario.getIdUsuario() == null) {
+                throw new IllegalArgumentException("Usuario o ID no válido");
+            }
+
+            // Primero verificamos si el usuario existe
+            int count = em.createQuery(
+                            "SELECT COUNT(u) FROM Usuario u WHERE u.idUsuario = :id", Long.class)
                     .setParameter("id", usuario.getIdUsuario())
-                    .getSingleResult();
+                    .getSingleResult().intValue();
 
-            if (usuarioExistente == null) {
-                throw new IllegalArgumentException("Usuario no encontrado con ID: " + usuario.getIdUsuario());
+            if (count == 0) {
+                throw new RuntimeException("No existe usuario con ID: " + usuario.getIdUsuario());
             }
 
-            // Forzar sincronización con la base de datos
-            em.refresh(usuarioExistente);
+            // Actualizamos usando JPQL
+            int updatedCount = em.createQuery(
+                            "UPDATE Usuario u SET " +
+                                    "u.nombre = :nombre, " +
+                                    "u.correo = :correo, " +
+                                    "u.telefono = :telefono, " +
+                                    "u.rol = :rol, " +
+                                    "u.fechaNacimiento = :fechaNacimiento, " +
+                                    "u.asiento = :asiento " +
+                                    "WHERE u.idUsuario = :id")
+                    .setParameter("nombre", usuario.getNombre())
+                    .setParameter("correo", usuario.getCorreo())
+                    .setParameter("telefono", usuario.getTelefono())
+                    .setParameter("rol", usuario.getRol())
+                    .setParameter("fechaNacimiento", usuario.getFechaNacimiento())
+                    .setParameter("asiento", usuario.getAsiento())
+                    .setParameter("id", usuario.getIdUsuario())
+                    .executeUpdate();
 
-            // Si el vueloId no es null, asignar el vuelo al usuario
+            // Si se especificó un vuelo, actualizamos la relación
             if (vueloId != null) {
-                Vuelo vuelo = em.find(Vuelo.class, vueloId);
-                if (vuelo != null) {
-                    usuarioExistente.setVuelo(vuelo);
-                    logger.info("Vuelo asignado al usuario con ID: " + usuario.getIdUsuario());
-                } else {
-                    throw new IllegalArgumentException("Vuelo no encontrado con ID: " + vueloId);
-                }
+                em.createQuery(
+                                "UPDATE Usuario u SET u.vuelo.idVuelo = :vueloId WHERE u.idUsuario = :userId")
+                        .setParameter("vueloId", vueloId)
+                        .setParameter("userId", usuario.getIdUsuario())
+                        .executeUpdate();
             }
 
-            // Guardar los cambios
-            em.merge(usuarioExistente);
-            return usuarioExistente;
-        } catch (NoResultException e) {
-            throw new IllegalArgumentException("Usuario no encontrado con ID: " + usuario.getIdUsuario());
+            em.flush();
+
+            // Retornamos el usuario actualizado
+            return em.find(Usuario.class, usuario.getIdUsuario());
+
+        } catch (Exception e) {
+            logger.severe("Error al actualizar usuario: " + e.getMessage());
+            throw new RuntimeException("Error al actualizar usuario: " + e.getMessage());
         }
     }
 
-
     @Override
-    public void eliminar(Usuario entity) {
-        super.borrar(entity);
+    @Transactional
+    public void eliminar(Usuario usuario) {
+        try {
+            if (usuario == null || usuario.getIdUsuario() == null) {
+                throw new IllegalArgumentException("Usuario o ID no válido");
+            }
+
+            // Verificamos si existe el usuario
+            int count = em.createQuery(
+                            "SELECT COUNT(u) FROM Usuario u WHERE u.idUsuario = :id", Long.class)
+                    .setParameter("id", usuario.getIdUsuario())
+                    .getSingleResult().intValue();
+
+            if (count == 0) {
+                throw new RuntimeException("No existe usuario con ID: " + usuario.getIdUsuario());
+            }
+
+            // Eliminamos usando JPQL
+            int deletedCount = em.createQuery(
+                            "DELETE FROM Usuario u WHERE u.idUsuario = :id")
+                    .setParameter("id", usuario.getIdUsuario())
+                    .executeUpdate();
+
+            em.flush();
+            logger.info("Usuario eliminado correctamente. ID: " + usuario.getIdUsuario());
+
+        } catch (Exception e) {
+            logger.severe("Error al eliminar usuario: " + e.getMessage());
+            throw new RuntimeException("Error al eliminar usuario: " + e.getMessage());
+        }
     }
 
     @Override
@@ -152,7 +202,25 @@ public class UsuarioServiceImpl extends AbstractFacade implements UsuarioService
         }
         return null;
     }
+    @Override
+    public Usuario find(Integer id) {
+        try {
+            if (id == null) {
+                return null;
+            }
 
+            List<Usuario> usuarios = em.createQuery(
+                            "SELECT u FROM Usuario u WHERE u.idUsuario = :id", Usuario.class)
+                    .setParameter("id", id)
+                    .getResultList();
+
+            return usuarios.isEmpty() ? null : usuarios.get(0);
+
+        } catch (Exception e) {
+            logger.severe("Error al buscar usuario con ID " + id + ": " + e.getMessage());
+            return null;
+        }
+    }
 
 
     @Override

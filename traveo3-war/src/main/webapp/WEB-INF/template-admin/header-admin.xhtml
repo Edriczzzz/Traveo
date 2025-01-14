@@ -1,6 +1,7 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
     <!-- Header Top -->
@@ -13,9 +14,15 @@
 
         </div>
         <div class="user-profile">
-            <h:graphicImage value="/resources/img/profile-user.png" styleClass="profile-img"/>
+            <h:form>
+                <p:menuButton trigger="profileTrigger" styleClass="profile-menu">
+                    <p:menuitem value="Cerrar Sesión" action="#{usuarioController.logout}" icon="pi pi-power-off"/>
+                </p:menuButton>
+            </h:form>
+            <h:graphicImage id="profileTrigger" value="/resources/img/profile-user.png" styleClass="profile-img" />
             <span class="user-name">#{usuarioController.nombreHeader}</span>
         </div>
+
     </div>
 
     <!-- Header Bottom -->

@@ -68,6 +68,20 @@ public class AerolineaController implements Serializable {
         }
     }
 
+    public Aerolinea buscarPorId(Integer idAerolinea) {
+        try {
+            if (idAerolinea != null) {
+                return aerolineaService.buscarPorId(idAerolinea);
+            } else {
+                logger.warning("El ID de la aerolínea proporcionado es nulo.");
+            }
+        } catch (Exception e) {
+            logger.severe("Error al buscar la aerolínea con ID " + idAerolinea + ": " + e.getMessage());
+        }
+        return null;
+    }
+
+
     public List<Aerolinea> getAerolineas() {
         return aerolineas;
     }

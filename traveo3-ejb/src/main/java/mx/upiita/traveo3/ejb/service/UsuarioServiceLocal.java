@@ -7,6 +7,7 @@ import java.util.List;
 
 @Local
 public interface UsuarioServiceLocal {
+    Usuario find(Integer id);
     List<Usuario> listar();
     Usuario crear(Usuario entity);
     Usuario actualizar(Usuario entity, Integer vueloId);

@@ -50,4 +50,14 @@ public class AerolineaServiceImpl extends AbstractFacade implements AerolineaSer
             em.remove(em.contains(entity) ? entity : em.merge(entity));
         }
     }
+    @Override
+    public Aerolinea buscarPorId(Integer idAerolinea) {
+        try {
+            return em.find(Aerolinea.class, idAerolinea);
+        } catch (Exception e) {
+            logger.severe("Error al buscar la aerolínea con ID " + idAerolinea + ": " + e.getMessage());
+            return null;
+        }
+    }
+
 }
