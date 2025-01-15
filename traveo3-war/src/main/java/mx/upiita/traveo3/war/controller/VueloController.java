@@ -55,12 +55,37 @@ public class VueloController implements Serializable {
         logger.info("Inicializando VueloController");
         nuevoVuelo = new Vuelo();
         selectedVuelo = new Vuelo();
+        vuelosUsuario = new ArrayList<>();
         cargarRutas();
         cargarVuelosUsuario();
         cargarOfertas();
         cargarAerolineas();
         cargarVuelos();
         initEstados();
+    }
+    public void verificarRegistros() {
+        try {
+            HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+                    .getExternalContext().getSession(false);
+            Usuario usuarioAutenticado = (Usuario) session.getAttribute("authenticatedUser");
+
+            if (usuarioAutenticado != null) {
+                logger.info("Usuario autenticado ID: " + usuarioAutenticado.getIdUsuario());
+                List<Registro> registros = registroService.buscarPorUsuarioId(usuarioAutenticado.getIdUsuario());
+                logger.info("Registros encontrados: " + registros.size());
+
+                for (Registro registro : registros) {
+                    logger.info("Registro: ID=" + registro.getId() +
+                            ", VueloID=" + (registro.getVuelo() != null ? registro.getVuelo().getIdVuelo() : "null") +
+                            ", UsuarioID=" + registro.getUsuario().getIdUsuario());
+                }
+            } else {
+                logger.warning("No se encontró usuario autenticado en la sesión");
+            }
+        } catch (Exception e) {
+            logger.severe("Error en verificarRegistros: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
     private void initEstados() {
         estados = new ArrayList<>();
@@ -164,24 +189,33 @@ public class VueloController implements Serializable {
 
     public void cargarVuelosUsuario() {
         try {
-            HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-                    .getExternalContext().getSession(false);
-            Usuario usuarioAutenticado = (Usuario) session.getAttribute("authenticatedUser");
+            HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+            Usuario usuarioAutenticado = (Usuario) session.getAttribute("authenticatedUser ");
 
-            if (usuarioAutenticado != null) {
-                List<Registro> relacionesRegistro = registroService.buscarPorUsuarioId(usuarioAutenticado.getIdUsuario());
+            if (usuarioAutenticado == null) {
+                logger.warning("No hay usuario autenticado");
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Por favor, inicia sesión"));
+                return;
+            }
 
-                vuelosUsuario = new ArrayList<>();
-                for (Registro usuarioVuelo : relacionesRegistro) {
-                    vuelosUsuario.add(usuarioVuelo.getVuelo());
+            List<Registro> relacionesRegistro = registroService.buscarPorUsuarioId(usuarioAutenticado.getIdUsuario());
+            vuelosUsuario = new ArrayList<>();
+
+            if (relacionesRegistro != null && !relacionesRegistro.isEmpty()) {
+                for (Registro registro : relacionesRegistro) {
+                    if (registro.getVuelo() != null) {
+                        vuelosUsuario.add(registro.getVuelo());
+                    }
                 }
-
-                logger.info("Vuelos cargados para el usuario: " + usuarioAutenticado.getIdUsuario() +
-                        ", Total vuelos: " + vuelosUsuario.size());
+                logger.info("Se cargaron " + vuelosUsuario.size() + " vuelos para el usuario " + usuarioAutenticado.getIdUsuario());
+            } else {
+                logger.info("No se encontraron vuelos para el usuario " + usuarioAutenticado.getIdUsuario());
             }
         } catch (Exception e) {
             logger.severe("Error al cargar los vuelos del usuario: " + e.getMessage());
-            vuelosUsuario = new ArrayList<>();
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "No se pudieron cargar los vuelos: " + e.getMessage()));
         }
     }
 

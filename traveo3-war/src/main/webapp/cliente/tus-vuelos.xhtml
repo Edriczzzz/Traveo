@@ -14,56 +14,44 @@
             <h2>Tus Vuelos Reservados</h2>
 
             <h:form id="form">
-                <p:dataTable id="vuelosTable"
-                             value="#{vueloController.vuelosUsuario}"
-                             var="vuelo"
-                             emptyMessage="No tienes vuelos reservados"
-                             styleClass="p-datatable-striped"
-                             rowKey="#{vuelo.idVuelo}">
-
-                    <p:column headerText="Número de Vuelo">
-                        <h:outputText value="#{vuelo.numeroVuelo}" />
-                    </p:column>
-
-                    <p:column headerText="Origen">
-                        <h:outputText value="#{vuelo.ruta.ciudadOrigen.nombre}" />
-                    </p:column>
-
-                    <p:column headerText="Destino">
-                        <h:outputText value="#{vuelo.ruta.ciudadDestino.nombre}" />
-                    </p:column>
-
-                    <p:column headerText="Fecha de Salida">
-                        <h:outputText value="#{vuelo.fechaSalida}">
-                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
-                        </h:outputText>
-                    </p:column>
-
-                    <p:column headerText="Fecha de Llegada">
-                        <h:outputText value="#{vuelo.fechaLlegada}">
-                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
-                        </h:outputText>
-                    </p:column>
-
-                    <p:column headerText="Estado">
-                        <h:outputText value="#{vuelo.estado}" />
-                    </p:column>
-
-                    <p:column headerText="Precio">
-                        <h:outputText value="$#{vuelo.precio}">
-                            <f:convertNumber pattern="#,##0.00" />
-                        </h:outputText>
-                    </p:column>
-
-                    <p:column headerText="Aerolínea">
-                        <h:outputText value="#{vuelo.aerolinea.nombre}" />
-                    </p:column>
-                </p:dataTable>
+                <p:dataTable id="vuelosTable" value="#{vueloController.vuelosUsuario}" var="vuelo">
+                <p:column headerText="Número de Vuelo">
+                    <h:outputText value="#{vuelo.numeroVuelo}" />
+                </p:column>
+                <p:column headerText="Ruta">
+                    <h:outputText value="#{vuelo.ruta.ciudadOrigen.nombre} - #{vuelo.ruta.ciudadDestino.nombre}" />
+                </p:column>
+                <p:column headerText="Aerolinea">
+                    <h:outputText value="#{vuelo.aerolinea.nombre}" />
+                </p:column>
+                <p:column headerText="Fecha Salida">
+                    <h:outputText value="#{vuelo.fechaSalida}">
+                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Fecha Llegada">
+                    <h:outputText value="#{vuelo.fechaLlegada}">
+                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                    </h:outputText>
+                </p:column>
+                <p:column headerText=" Estado">
+                    <h:outputText value="#{vuelo.estado}" />
+                </p:column>
+                <p:column headerText="Precio">
+                    <h:outputText value="$#{vuelo.precio}">
+                        <f:convertNumber pattern="#,##0.00" />
+                    </h:outputText>
+                </p:column>
+            </p:dataTable>
 
                 <p:commandButton value="Actualizar"
                                  action="#{vueloController.cargarVuelosUsuario}"
                                  update="vuelosTable"
                                  icon="pi pi-refresh"
+                                 styleClass="mt-3"/>
+                <p:commandButton value="Verificar Registros"
+                                 action="#{vueloController.verificarRegistros}"
+                                 update="vuelosTable"
                                  styleClass="mt-3"/>
             </h:form>
         </div>

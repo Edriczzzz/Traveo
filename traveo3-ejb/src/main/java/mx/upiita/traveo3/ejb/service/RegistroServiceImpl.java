@@ -69,8 +69,7 @@ public class RegistroServiceImpl extends AbstractFacade implements RegistroServi
     public List<Registro> buscarPorUsuarioId(Integer usuarioId) {
         try {
             return em.createQuery(
-                            "SELECT uv FROM Registro uv WHERE uv.usuario.idUsuario = :usuarioId",
-                            Registro.class)
+                            "SELECT r FROM Registro r WHERE r.usuario.idUsuario = :usuarioId", Registro.class)
                     .setParameter("usuarioId", usuarioId)
                     .getResultList();
         } catch (Exception e) {
