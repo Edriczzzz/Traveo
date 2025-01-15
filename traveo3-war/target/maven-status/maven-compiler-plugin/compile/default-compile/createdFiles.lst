@@ -1,5 +1,7 @@
-mx\upiita\traveo3\war\controller\UsuarioController.class
+mx\upiita\traveo3\war\converter\RutaConverter.class
 mx\upiita\traveo3\war\controller\AerolineaController.class
 mx\upiita\traveo3\war\controller\CiudadController.class
+mx\upiita\traveo3\war\controller\UsuarioController.class
 mx\upiita\traveo3\war\controller\RutaController.class
+mx\upiita\traveo3\war\converter\AerolineaConverter.class
 mx\upiita\traveo3\war\controller\VueloController.class

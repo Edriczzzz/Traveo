@@ -14,4 +14,6 @@ public interface VueloServiceLocal {
     public Vuelo actualizar(Vuelo entity);
     public void eliminar(Vuelo entity);
     List<Vuelo> obtenerPrimerosVuelos(int cantidad);
+    Vuelo buscarPorId(Integer idVuelo);
+
 }

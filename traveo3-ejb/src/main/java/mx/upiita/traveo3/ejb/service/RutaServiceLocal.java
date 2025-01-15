@@ -13,4 +13,5 @@ public interface RutaServiceLocal {
     public Ruta crear(Ruta entity);
     public Ruta actualizar(Ruta entity);
     public void eliminar(Ruta entity);
+    Ruta buscarPorId(Integer idRuta);
 }

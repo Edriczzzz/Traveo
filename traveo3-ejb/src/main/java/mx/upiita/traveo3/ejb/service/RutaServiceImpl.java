@@ -50,6 +50,10 @@ public class RutaServiceImpl extends AbstractFacade implements  RutaServiceLocal
 
     }
 
+    @Override
+    public Ruta buscarPorId(Integer idRuta) {
+        return em.find(Ruta.class, idRuta);
+    }
 
 
 }

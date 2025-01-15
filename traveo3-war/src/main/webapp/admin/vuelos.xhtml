@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition template="/WEB-INF/template-admin/plantilla-admin.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <ui:define name="contenido">
+        <h:form id="vuelosForm">
+            <p:growl id="messages" showDetail="true" />
+
+            <p:dataTable id="vuelosTable" var="vuelo"
+                         value="#{vueloController.vuelos}"
+                         paginator="true" rows="10"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
+                         rowsPerPageTemplate="5,10,15">
+
+                <p:column headerText="ID Vuelo">
+                    <h:outputText value="#{vuelo.idVuelo}" />
+                </p:column>
+
+                <p:column headerText="Número de Vuelo">
+                    <h:outputText value="#{vuelo.numeroVuelo}" />
+                </p:column>
+
+                <p:column headerText="Ruta">
+                    <h:outputText value="#{vuelo.ruta.ciudadOrigen} - #{vuelo.ruta.ciudadDestino}" />
+                </p:column>
+
+                <p:column headerText="Aerolínea">
+                    <h:outputText value="#{vuelo.aerolinea.nombre}" />
+                </p:column>
+
+                <p:column headerText="Fecha Salida">
+                    <h:outputText value="#{vuelo.fechaSalida}">
+                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="Fecha Llegada">
+                    <h:outputText value="#{vuelo.fechaLlegada}">
+                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="Precio">
+                    <h:outputText value="#{vuelo.precio}">
+                        <f:convertNumber type="currency" currencySymbol="$" />
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="Estado">
+                    <h:outputText value="#{vuelo.estado}" />
+                </p:column>
+
+                <p:column headerText="Acciones">
+                    <p:commandButton icon="pi pi-pencil"
+                                     actionListener="#{vueloController.prepararEdicion(vuelo)}"
+                                     update=":editForm"
+                                     oncomplete="PF('editDialog').show()"
+                                     styleClass="mr-2">
+                    </p:commandButton>
+
+                    <p:commandButton icon="pi pi-trash"
+                                     actionListener="#{vueloController.eliminarVuelo(vuelo)}"
+                                     update="@form"
+                                     styleClass="ui-button-danger">
+                        <p:confirm header="Confirmación"
+                                   message="¿Está seguro de eliminar este vuelo?"
+                                   icon="pi pi-exclamation-triangle" />
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Sí" type="button"
+                                 styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+                <p:commandButton value="No" type="button"
+                                 styleClass="ui-confirmdialog-no ui-button-secondary"
+                                 icon="pi pi-times" />
+            </p:confirmDialog>
+        </h:form>
+
+        <p:dialog id="editDialog" header="Editar Vuelo"
+                  widgetVar="editDialog" modal="true"
+                  responsive="true">
+            <h:form id="editForm">
+                <div class="p-fluid">
+                    <div class="p-field">
+                        <p:outputLabel for="numeroVuelo" value="Número de Vuelo" />
+                        <p:inputText id="numeroVuelo"
+                                     value="#{vueloController.selectedVuelo.numeroVuelo}"
+                                     required="true" />
+                    </div>
+
+                    <div class="p-field">
+                        <p:outputLabel for="ruta" value="Ruta" />
+                        <p:selectOneMenu id="ruta" value="#{vueloController.selectedVuelo.ruta}"
+                                         converter="#{rutaConverter}">
+                            <f:selectItems value="#{vueloController.rutas}"
+                                           var="ruta"
+                                           itemLabel="#{ruta.ciudadOrigen} - #{ruta.ciudadDestino}"
+                                           itemValue="#{ruta}"/>
+                        </p:selectOneMenu>
+
+                    </div>
+
+                    <div class="p-field">
+                        <p:outputLabel for="aerolinea" value="Aerolínea" />
+                        <p:selectOneMenu id="aerolinea" value="#{vueloController.selectedVuelo.aerolinea}"
+                                         converter="#{aerolineaConverter}">
+                            <f:selectItems value="#{vueloController.aerolineas}"
+                                           var="aerolinea"
+                                           itemLabel="#{aerolinea.nombre}"
+                                           itemValue="#{aerolinea}"/>
+                        </p:selectOneMenu>
+                    </div>
+
+                    <div class="p-field">
+                        <p:outputLabel for="fechaSalida" value="Fecha de Salida" />
+                        <p:calendar id="fechaSalida"
+                                    value="#{vueloController.selectedVuelo.fechaSalida}"
+                                    pattern="dd/MM/yyyy HH:mm"
+                                    showTime="true" />
+                    </div>
+
+                    <div class="p-field">
+                        <p:outputLabel for="fechaLlegada" value="Fecha de Llegada" />
+                        <p:calendar id="fechaLlegada"
+                                    value="#{vueloController.selectedVuelo.fechaLlegada}"
+                                    pattern="dd/MM/yyyy HH:mm"
+                                    showTime="true" />
+                    </div>
+
+                    <div class="p-field">
+                        <p:outputLabel for="precio" value="Precio" />
+                        <p:inputNumber id="precio"
+                                       value="#{vueloController.selectedVuelo.precio}"
+                                       symbol="$"
+                                       symbolPosition="p"
+                                       decimalPlaces="2" />
+                    </div>
+
+                    <div class="p-field">
+                        <p:outputLabel for="estado" value="Estado" />
+                        <p:selectOneMenu id="estado" value="#{vueloController.selectedVuelo.estado}">
+                            <f:selectItems value="#{vueloController.estados}" />
+                        </p:selectOneMenu>
+                    </div>
+
+                    <div class="p-field mt-4">
+                        <p:commandButton value="Guardar"
+                                         action="#{vueloController.actualizarVuelo(vueloController.selectedVuelo)}"
+                                         update=":vuelosForm:vuelosTable :vuelosForm:messages"
+                                         oncomplete="if (!args.validationFailed) PF('editDialog').hide()"
+                                         styleClass="mr-2" />
+                        <p:commandButton value="Cancelar"
+                                         onclick="PF('editDialog').hide()"
+                                         type="button"
+                                         styleClass="ui-button-secondary" />
+                    </div>
+                </div>
+            </h:form>
+        </p:dialog>
+    </ui:define>
+</ui:composition>
